@@ -12,7 +12,7 @@ jobs:
     steps:
       - uses: actions/checkout@v6
 
-      - run: npm install -g pnpm@11.2.1
+      - run: sudo npm install -g pnpm@11.2.1
 
       - run: pnpm i
       - run: pnpm test
