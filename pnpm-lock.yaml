@@ -90,12 +90,18 @@ importers:
 
   packages/pkg-a:
     devDependencies:
+      vite:
+        specifier: ^7.3.5
+        version: 7.3.5
       vitest:
         specifier: ^3.2.6
         version: 3.2.6
 
   packages/pkg-b:
     devDependencies:
+      vite:
+        specifier: ^7.3.5
+        version: 7.3.5
       vitest:
         specifier: ^3.2.6
         version: 3.2.6
