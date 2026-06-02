@@ -5,7 +5,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  verify:
+  test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
@@ -17,4 +17,4 @@ jobs:
       - uses: pnpm/action-setup@v6
 
       - run: pnpm i
-      - run: pnpm build
+      - run: pnpm test

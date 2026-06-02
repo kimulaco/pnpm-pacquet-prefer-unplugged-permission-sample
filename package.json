@@ -3,10 +3,10 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "esbuild src/sum.ts --outfile=dist/sum.js"
+    "test": "vitest run"
   },
   "devDependencies": {
-    "esbuild": "^0.28.0"
+    "vitest": "^3.2.6"
   },
   "packageManager": "pnpm@11.5.1",
   "devEngines": {
