@@ -48,6 +48,10 @@ jobs:
             echo "=== esbuild JS wrapper ==="
             stat node_modules/.pnpm/esbuild@0.25.12/node_modules/esbuild/bin/esbuild 2>/dev/null || true
 
+            echo ""
+            echo "=== umask ==="
+            umask
+
       - run:
           name: Test
           command: pnpm test
