@@ -23,8 +23,6 @@ jobs:
           key: pnpm-{{ checksum "pnpm-lock.yaml" }}
           paths:
             - node_modules
-            - packages/pkg-a/node_modules
-            - packages/pkg-b/node_modules
 
       - run:
           name: Debug esbuild binary permissions
@@ -57,12 +55,8 @@ jobs:
             pnpm store path
 
             echo ""
-            echo "=== esbuild binary in CAS (files ~10MB) ==="
-            STORE=$(pnpm store path)
-            find "$STORE/files" -type f -size +9M 2>/dev/null | xargs ls -la 2>/dev/null | head -10
-
-            echo ""
             echo "=== esbuild -exec entry in CAS (inode) ==="
+            STORE=$(pnpm store path)
             find "$STORE/files" -name "*-exec" -size +9M 2>/dev/null | xargs stat 2>/dev/null | grep -E "File:|Inode:|Links:|Access:.*0[0-9]" | head -20
 
             echo ""

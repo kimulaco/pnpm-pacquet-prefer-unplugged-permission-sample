@@ -1,8 +1,9 @@
 {
   "name": "pnpm-pacquet-esbuild-sample",
   "private": true,
+  "type": "module",
   "scripts": {
-    "test": "pnpm -r run test"
+    "test": "vitest run"
   },
   "packageManager": "pnpm@11.2.1",
   "devEngines": {
@@ -12,5 +13,8 @@
       "onFail": "download"
     }
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "vite": "^6.3.5",
+    "vitest": "^3.2.6"
+  }
 }

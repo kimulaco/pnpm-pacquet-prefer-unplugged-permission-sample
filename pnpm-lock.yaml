@@ -87,18 +87,6 @@ importers:
       node:
         specifier: runtime:24.14.0
         version: runtime:24.14.0
-
-  packages/pkg-a:
-    devDependencies:
-      vite:
-        specifier: ^6.3.5
-        version: 6.4.3
-      vitest:
-        specifier: ^3.2.6
-        version: 3.2.6
-
-  packages/pkg-b:
-    devDependencies:
       vite:
         specifier: ^6.3.5
         version: 6.4.3
