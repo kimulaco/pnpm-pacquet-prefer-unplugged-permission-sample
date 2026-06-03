@@ -1,5 +1,5 @@
 {
-  "name": "repro-pacquet-prefer-unplugged-permission",
+  "name": "pnpm-pacquet-prefer-unplugged-permission-sample",
   "private": true,
   "type": "module",
   "scripts": {

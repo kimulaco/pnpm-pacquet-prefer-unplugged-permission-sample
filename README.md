@@ -1,4 +1,4 @@
-# repro-pacquet-prefer-unplugged-permission
+# pnpm-pacquet-prefer-unplugged-permission-sample
 
 Reproduction for a bug where pacquet (pnpm's Rust install engine) installs files from packages with `preferUnplugged: true` without preserving the executable bit on Linux.
 
