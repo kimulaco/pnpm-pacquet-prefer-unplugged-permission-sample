@@ -1,15 +1,15 @@
 {
-  "name": "pnpm-pacquet-esbuild-sample",
+  "name": "repro-pacquet-prefer-unplugged-permission",
   "private": true,
   "type": "module",
   "scripts": {
     "test": "vitest run"
   },
-  "packageManager": "pnpm@11.2.1",
+  "packageManager": "pnpm@11.5.1",
   "devEngines": {
     "runtime": {
       "name": "node",
-      "version": "24.14.0",
+      "version": "24.16.0",
       "onFail": "download"
     }
   },

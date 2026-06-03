@@ -2,4 +2,4 @@ allowBuilds:
   "esbuild": false
 
 configDependencies:
-  "@pnpm/pacquet": 0.2.2-15
+  "@pnpm/pacquet": 0.2.13

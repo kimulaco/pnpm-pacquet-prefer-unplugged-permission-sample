@@ -3,13 +3,13 @@ version: 2.1
 jobs:
   test:
     docker:
-      - image: cimg/node:24.14
+      - image: cimg/node:24.16
     steps:
       - checkout
 
       - run:
           name: Install pnpm
-          command: sudo npm install -g pnpm@11.2.1
+          command: sudo npm install -g pnpm@11.5.1
 
       - restore_cache:
           keys:

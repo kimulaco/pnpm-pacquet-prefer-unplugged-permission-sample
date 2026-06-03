@@ -8,11 +8,11 @@ jobs:
   test:
     runs-on: ubuntu-latest
     container:
-      image: cimg/node:24.14
+      image: cimg/node:24.16
     steps:
       - uses: actions/checkout@v6
 
-      - run: sudo npm install -g pnpm@11.2.1
+      - run: sudo npm install -g pnpm@11.5.1
 
       - run: pnpm i
       - run: pnpm test
