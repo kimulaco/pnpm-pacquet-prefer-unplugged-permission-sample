@@ -62,8 +62,16 @@ jobs:
             find "$STORE/files" -type f -size +9M 2>/dev/null | xargs ls -la 2>/dev/null | head -10
 
             echo ""
-            echo "=== esbuild -exec entry in CAS ==="
-            find "$STORE/files" -name "*-exec" -size +9M 2>/dev/null | xargs ls -la 2>/dev/null | head -5
+            echo "=== esbuild -exec entry in CAS (inode) ==="
+            find "$STORE/files" -name "*-exec" -size +9M 2>/dev/null | xargs stat 2>/dev/null | grep -E "File:|Inode:|Links:|Access:.*0[0-9]" | head -20
+
+            echo ""
+            echo "=== node_modules esbuild binary (inode) ==="
+            stat node_modules/.pnpm/@esbuild+linux-x64@0.25.12/node_modules/@esbuild/linux-x64/bin/esbuild 2>/dev/null | grep -E "File:|Inode:|Links:|Access:.*0[0-9]"
+
+            echo ""
+            echo "=== preferUnplugged check ==="
+            cat node_modules/.pnpm/@esbuild+linux-x64@0.25.12/node_modules/@esbuild/linux-x64/package.json 2>/dev/null | grep -E "preferUnplugged|bin"
 
       - run:
           name: Test
