@@ -29,16 +29,24 @@ jobs:
       - run:
           name: Debug esbuild binary permissions
           command: |
-            BIN=$(find node_modules/.pnpm -path "*/bin/esbuild" -not -name "*.js" 2>/dev/null | head -1)
-            if [ -z "$BIN" ]; then
-              echo "esbuild binary not found"
+            echo "=== All esbuild entries in .pnpm ==="
+            ls -la node_modules/.pnpm/ | grep esbuild || true
+
+            echo ""
+            echo "=== @esbuild/linux-x64 directory permissions ==="
+            DIR="node_modules/.pnpm/@esbuild+linux-x64@0.25.12"
+            if [ -d "$DIR" ]; then
+              ls -la "$DIR"
+              ls -la "$DIR/node_modules/@esbuild/linux-x64/" 2>/dev/null || echo "cannot list: permission denied"
+              ls -la "$DIR/node_modules/@esbuild/linux-x64/bin/" 2>/dev/null || echo "cannot list bin/: permission denied"
+              stat "$DIR/node_modules/@esbuild/linux-x64/bin/esbuild" 2>/dev/null || echo "cannot stat binary"
             else
-              echo "Path: $BIN"
-              ls -la "$BIN"
-              stat "$BIN"
-              df -T "$(dirname "$BIN")"
+              echo "$DIR does not exist"
             fi
-            mount | grep noexec | head -5 || true
+
+            echo ""
+            echo "=== esbuild JS wrapper ==="
+            stat node_modules/.pnpm/esbuild@0.25.12/node_modules/esbuild/bin/esbuild 2>/dev/null || true
 
       - run:
           name: Test
