@@ -5,7 +5,7 @@
   "scripts": {
     "test": "vitest run"
   },
-  "packageManager": "pnpm@11.5.1",
+  "packageManager": "pnpm@11.7.0",
   "devEngines": {
     "runtime": {
       "name": "node",
