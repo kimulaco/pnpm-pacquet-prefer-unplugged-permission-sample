@@ -71,10 +71,10 @@ jobs:
           name: Test
           command: pnpm test
 
-  # 原因切り分け用ジョブ。packageImportMethod を clone / hardlink / copy / auto に
-  # 固定し、それぞれで esbuild バイナリの実行ビットと pnpm test の成否を見る。
-  # キャッシュは一切使わず毎回フレッシュにインストールする（restore/save_cache 無し）。
-  # 期待: clone と auto は EACCES で失敗、hardlink と copy は成功。
+  # Diagnostic job: pin packageImportMethod to clone / hardlink / copy / auto
+  # and, for each, inspect the esbuild binary's exec bit and whether `pnpm test`
+  # passes. No cache is used so every run installs fresh (no restore/save_cache).
+  # Expectation: clone and auto fail with EACCES (0644); hardlink and copy pass.
   diagnose:
     parameters:
       import_method:
@@ -92,10 +92,10 @@ jobs:
           name: Set packageImportMethod=<< parameters.import_method >>
           command: |
             METHOD="<< parameters.import_method >>"
-            # 既存の packageImportMethod 行があれば除去してから設定し直す
+            # Drop any existing packageImportMethod line, then set it again.
             grep -v '^packageImportMethod:' pnpm-workspace.yaml > ws.tmp || true
             mv ws.tmp pnpm-workspace.yaml
-            # auto はデフォルトなので何も書かない（reflink が効けば clone が選ばれる）
+            # "auto" is the default, so write nothing (clone is chosen when reflink works).
             if [ "$METHOD" != "auto" ]; then
               printf '\npackageImportMethod: %s\n' "$METHOD" >> pnpm-workspace.yaml
             fi
@@ -107,27 +107,27 @@ jobs:
           command: pnpm i 2>&1 | tee /tmp/install.log
 
       - run:
-          name: Debug — import method & esbuild binary permissions
+          name: Debug - import method & esbuild binary permissions
           command: |
-            echo "=== 実際に使われた import method（install ログより）==="
-            grep -iE "are (cloned|copied|hard linked)" /tmp/install.log || echo "(method 行が見つかりません)"
+            echo "=== import method actually used (from install log) ==="
+            grep -iE "are (cloned|copied|hard linked)" /tmp/install.log || echo "(method line not found)"
 
             echo ""
-            echo "=== node_modules 内 esbuild バイナリ ==="
+            echo "=== esbuild binary in node_modules ==="
             BIN="$(find node_modules/.pnpm -path '*@esbuild+linux-x64*/bin/esbuild' 2>/dev/null | head -1)"
             if [ -n "$BIN" ] && [ -f "$BIN" ]; then
               stat -c '%A (%a) inode=%i %n' "$BIN"
               if [ -x "$BIN" ]; then
-                echo "EXECUTABLE: yes (0755 系)"
+                echo "EXECUTABLE: yes (0755)"
               else
-                echo "EXECUTABLE: NO → spawn で EACCES になる (0644)"
+                echo "EXECUTABLE: NO -> spawn fails with EACCES (0644)"
               fi
             else
-              echo "esbuild linux-x64 バイナリが見つかりません"
+              echo "esbuild linux-x64 binary not found"
             fi
 
             echo ""
-            echo "=== CAS ストア側の -exec エントリ（正しく 0755 のはず）==="
+            echo "=== CAS store -exec entry (should correctly be 0755) ==="
             STORE="$(pnpm store path)"
             find "$STORE/files" -name '*-exec' -size +5M -exec stat -c '%A (%a) inode=%i %n' {} \; 2>/dev/null | head -5
 
@@ -136,7 +136,7 @@ jobs:
             umask
 
       - run:
-          name: Test (clone / auto は EACCES で失敗する想定)
+          name: Test (clone / auto are expected to fail with EACCES)
           command: pnpm test
 
 workflows:
